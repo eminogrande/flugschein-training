@@ -14,6 +14,8 @@ sequenceDiagram
   A->>A: README scope, proof table, DECISIONS
   U->>A: CI with card tests, Pages on main, ready PR
   A->>A: test suite green, pages.yml, PR
+  U->>A: finalize v0.1.0 on main
+  A->>A: PR #1 merged, docs + footer stamp, release
 ```
 
 ## 1. "Build the public app release"
@@ -58,3 +60,18 @@ Result: `.github/workflows/pages.yml` — `push: branches: [main]` plus dispatch
 - No framework, bundler, `npm install`, account, analytics or network call.
 - No change to the question bank. Ten per subject is documented as thin rather than topped up with filler.
 - No claim that the questions are real exam items.
+
+## 8. "Finalize v0.1.0 on main" — 2026-10-28 — emino
+
+> App-only public repo, docs on main, Pages, flashcards. Finalize the release: README status, CHANGELOG `[RELEASE] v0.1.0`, PROMPTLOG, version stamp in the app, then a GitHub Release on the final main SHA. No question changes, no new features.
+
+Decisions distilled, all shipped in the docs commit on `b958a9e2`:
+
+- **Clean public app-only repo** — `eminogrande/flugschein-training`, import at `cfd1164`, no research files, no shared history (see [D1](DECISIONS.md)).
+- **Docs live on `main`** — the `feat/flashcards-docs` branch is gone after the merge; docs are committed straight to the default branch (D10).
+- **Pages is the deploy target** — `.github/workflows/pages.yml`, live at <https://eminogrande.github.io/flugschein-training/>, run `40701087940` green on `b958a9e2` (D8).
+- **Flashcards stay a separate mode** over the unchanged 90 questions (D4, D5).
+- **Release is v0.1.0** — first public release, no separate 0.2.0 ever shipped (D11).
+- **Version visible in the app** — footer `v0.1.0 · built 2026-10-28 · by emino`, because a static app has no health endpoint (D12).
+
+Sequence: PR [#1](https://github.com/eminogrande/flugschein-training/pull/1) merged as `b958a9e2` — docs and release metadata follow on `main` — GitHub Release `v0.1.0` targets the final `main` SHA.

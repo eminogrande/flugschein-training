@@ -6,11 +6,12 @@
 
 | | |
 |---|---|
-| Version | 0.2.0 |
+| Version | 0.1.0 — first public release |
 | Date | 2026-10-28 |
 | Who | Emin Mahrt ([@eminogrande](https://github.com/eminogrande)) |
-| Status | Public, app-only repo. Pages workflow added on this branch, not yet merged |
-| Live | `https://eminogrande.github.io/flugschein-training/` once `main` deploys |
+| Status | Public, app-only repo. Merged to `main` via [PR #1](https://github.com/eminogrande/flugschein-training/pull/1) and deployed |
+| Live | <https://eminogrande.github.io/flugschein-training/> |
+| Deployed revision | `b958a9e2` (merge of PR #1, Pages run `40701087940` green) |
 | Scope | Browser app + tests + docs. No research notes, no email history |
 
 ## Read this first: what 90 questions can and cannot do
@@ -137,7 +138,7 @@ flowchart LR
 | Reset clears the store and re-offers all 90 | browser test | `test/cards.smoke.test.mjs:142-158` |
 | Quiz still runs, four options, scoring intact | browser test | `test/cards.smoke.test.mjs:173-187` |
 | No horizontal scroll at 320 px, no console errors | browser test | `test/cards.smoke.test.mjs:189-206` |
-| CI green on the PR head | Actions run on this PR | `.github/workflows/test.yml` |
+| CI green on the merged commit `b958a9e2` | [tests run 40701087581](https://github.com/eminogrande/flugschein-training/actions/runs/40701087581) | `.github/workflows/test.yml` |
 
 ## Limits
 
@@ -150,3 +151,5 @@ flowchart LR
 ## Deploy
 
 `.github/workflows/pages.yml` stages the five static files into `_site` and publishes them with `actions/deploy-pages` on every push to `main`. Pages must be set to **GitHub Actions** as its source (Settings → Pages → Build and deployment → Source). PRs run only the test workflow.
+
+There is no health endpoint — the app is static. The running build identifies itself in the footer with version, build date and author (`v0.1.0 · built 2026-10-28 · by emino`, `index.html:149-151`, styling `styles.css:357-363`), which is the live status surface a reader or agent compares against this table.

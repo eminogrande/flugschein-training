@@ -7,9 +7,14 @@ flowchart LR
   D1[New public repo, no history] --> D2[Plain static files]
   D2 --> D3[Quiz kept as the default]
   D3 --> D4[Flashcards as a separate mode]
-  D4 --> D5[Leitner in localStorage]
-  D5 --> D6[Browser tests in cloud CI]
-  D6 --> D7[Pages workflow on main only]
+  D4 --> D5[Leitner boxes]
+  D5 --> D6[Leitner in localStorage]
+  D6 --> D7[Browser tests in cloud CI]
+  D7 --> D8[Pages workflow on main only]
+  D8 --> D9[Honesty over a claim]
+  D9 --> D10[Docs straight to main]
+  D10 --> D11[v0.1.0 as first release]
+  D11 --> D12[Version stamp in footer]
 ```
 
 ## D1 — A new public repo instead of publishing the old one
@@ -79,3 +84,27 @@ flowchart LR
 **Decision:** the README states that 90 questions is a starter set, that the real TCAA item count and pass mark are unverified, and that the 75 % band is a heuristic.
 
 **Why:** a candidate who trusts "90 questions" as exam coverage will under-prepare, and the app cannot tell them so. Naming the gap is more useful than a confident tagline.
+
+## D10 — Docs go straight to `main`
+
+**Decision:** after PR #1 merged, the working branch `feat/flashcards-docs` was deleted and the release docs are committed directly to `main`.
+
+**Why:** the branch held documentation and a workflow that had already been reviewed and merged; keeping it alive meant every doc fix needed another PR round-trip for files with no runtime risk. `pages.yml` runs on `main` pushes, so a docs commit also republishes the same app bytes — no divergence between docs and the live artifact.
+
+**Cost:** no PR review on doc-only commits, and each docs push spends a deploy run. Accepted; the tests workflow still runs on every push, so a broken file cannot land silently.
+
+## D11 — `v0.1.0` is the first release; `0.2.0` never shipped
+
+**Decision:** the first public release is `v0.1.0`, tagged on the merge `b958a9e2`. The CHANGELOG's `0.2.0` block was written before the merge and stays in place, marked as landing inside `0.1.0`.
+
+**Why:** no reader ever installed a `0.2.0`. Reserving the number for a later bump keeps the release line monotonic from a real baseline, and folding the pre-merge block avoids an invented `v0.2.0` tag that would point at the same commit.
+
+**Cost:** the CHANGELOG reads one version ahead of the release for one block. Marked explicitly so it is not mistaken for drift.
+
+## D12 — Version, build date and author in the app footer
+
+**Decision:** the footer prints `v0.1.0 · built 2026-10-28 · by emino` (`index.html:149-151`).
+
+**Why:** a static app has no `/healthz`, so nothing in the running build says which revision a reader is looking at. The stamp is the status surface: compare it against the README table and the GitHub Release and any stale deploy is instantly visible.
+
+**Cost:** one more string to bump on each release, and it is duplicated truth with the README. The release procedure names both places together, so they move in one commit.

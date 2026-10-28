@@ -5,8 +5,25 @@ All notable changes to this repo. Dates are ISO. Versions are `MAJOR.MINOR.PATCH
 ```mermaid
 timeline
   title Release line
-  2026-10-28 : 0.1.0 imported tested quiz : 0.2.0 flashcards, docs, CI, Pages workflow
+  2026-10-28 : 0.1.0 imported tested quiz : v0.1.0 first public release, merged + on Pages
 ```
+
+## 2026-10-28 — [RELEASE] v0.1.0 — emino
+
+`b958a9e2` is the merge of [PR #1](https://github.com/eminogrande/flugschein-training/pull/1) into `main` and the first public release. Deploy: GitHub Pages, <https://eminogrande.github.io/flugschein-training/> (Pages workflow `.github/workflows/pages.yml`, run `40701087940` green on `b958a9e2`; tests run `40701087581` green on the same commit).
+
+Released content is the 0.2.0 block below, unchanged — that block was written before the merge and never shipped separately, so it lands as part of 0.1.0:
+
+- Quiz from the imported 90-question bank, now with a flashcard mode over it.
+- Leitner scheduling (five boxes, 0 / 1 / 3 / 7 / 16 days) with reset, `localStorage` plus memory fallback.
+- Keyboard control and accessibility pass on the card screen.
+- Honest-scope README (starter-set limits, study plan), `DECISIONS.md`, `PROMPTLOG.md`.
+- Extended test suite and the Pages workflow.
+
+Release metadata, same commit as the docs entries below:
+
+- App footer carries `v0.1.0 · built 2026-10-28 · by emino` — the only status surface, since a static app has no health endpoint (`index.html:149-151`).
+- README status table names this version, date, author, live URL and `b958a9e2` as the deployed revision.
 
 ## 0.2.0 — 2026-10-28 — unreleased (branch `feat/flashcards-docs`)
 
