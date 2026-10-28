@@ -11,7 +11,7 @@
 | Who | Emin Mahrt ([@eminogrande](https://github.com/eminogrande)) |
 | Status | Public, app-only repo. Merged to `main` via [PR #1](https://github.com/eminogrande/flugschein-training/pull/1) and deployed |
 | Live | <https://eminogrande.github.io/flugschein-training/> |
-| Deployed revision | `main` HEAD. Release `v0.1.0` is tagged at `508c09c` (release metadata on top of the released code merge `b958a9e2`); Pages run `40701951159` green |
+| Deployed revision | `main` HEAD, published by `pages.yml` on every push. Released code merge: `b958a9e2`; release `v0.1.0` is tagged on `main` |
 | Scope | Browser app + tests + docs. No research notes, no email history |
 
 ## Read this first: what 90 questions can and cannot do
