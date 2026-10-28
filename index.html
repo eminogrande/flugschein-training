@@ -49,6 +49,17 @@
       <p class="error" id="start-error" role="alert" hidden></p>
       <button type="submit" class="primary" id="start-btn">Start practice</button>
     </form>
+
+    <section class="cards-entry" aria-labelledby="cards-h">
+      <h2 class="sub-h" id="cards-h">Flashcards</h2>
+      <p class="lede small">
+        One card at a time, flip to check, then say <em>Again</em> or <em>Know</em>. Cards you miss come back
+        sooner; progress is stored in this browser only.
+      </p>
+      <p class="cards-summary" id="cards-summary" aria-live="polite"></p>
+      <button type="button" class="secondary" id="start-cards">Review with flashcards</button>
+      <button type="button" class="link" id="reset-cards" hidden>Reset flashcard progress</button>
+    </section>
   </section>
 
   <!-- QUIZ -->
@@ -76,6 +87,50 @@
     <button type="button" class="link quit" id="quit-btn">End round</button>
   </section>
 
+  <!-- FLASHCARDS -->
+  <section id="screen-cards" class="screen" aria-labelledby="cards-progress" hidden>
+    <div class="bar">
+      <div class="bar-row">
+        <span id="cards-progress" aria-live="polite">Card 1 of 1</span>
+        <span id="cards-box" aria-live="polite"></span>
+      </div>
+      <div class="track"><div class="fill" id="cards-fill"></div></div>
+    </div>
+
+    <p class="subject-tag" id="card-subject"></p>
+
+    <div class="card-shell">
+      <button type="button" class="card" id="card-flip" aria-expanded="false" aria-controls="card-back">
+        <span class="card-side" id="card-front">
+          <span class="card-hint">Question — click or press Space to flip</span>
+          <span class="question card-question" id="card-q"></span>
+        </span>
+        <span class="card-side card-back" id="card-back" hidden>
+          <span class="card-hint" id="card-hint-back">Answer</span>
+          <span class="card-answer" id="card-a"></span>
+          <span class="explain" id="card-explain"></span>
+          <span class="source" id="card-source"></span>
+        </span>
+      </button>
+    </div>
+
+    <p class="cards-status" id="cards-status" role="status"></p>
+
+    <div class="grade-row">
+      <button type="button" class="again" id="card-again" disabled>
+        <span class="grade-key" aria-hidden="true">1</span> Again
+      </button>
+      <button type="button" class="know" id="card-know" disabled>
+        <span class="grade-key" aria-hidden="true">2</span> Know
+      </button>
+    </div>
+
+    <button type="button" class="link quit" id="card-back-btn">Back to start</button>
+    <p class="lede small kbd-note">
+      Keys: <kbd>Space</kbd> flip · <kbd>1</kbd> again · <kbd>2</kbd> know · <kbd>Esc</kbd> back.
+    </p>
+  </section>
+
   <!-- RESULTS -->
   <section id="screen-results" class="screen" aria-labelledby="res-h" hidden>
     <h1 id="res-h">Round complete</h1>
@@ -94,6 +149,7 @@
 </footer>
 
 <script src="questions.js"></script>
+<script src="flashcards.js"></script>
 <script src="app.js"></script>
 </body>
 </html>

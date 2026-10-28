@@ -32,7 +32,26 @@
     review: document.getElementById('review'),
     reviewHeading: document.getElementById('review-h'),
     again: document.getElementById('again-btn'),
-    again2: document.getElementById('again-btn-2')
+    again2: document.getElementById('again-btn-2'),
+    cards: document.getElementById('screen-cards'),
+    cardsSummary: document.getElementById('cards-summary'),
+    startCards: document.getElementById('start-cards'),
+    resetCards: document.getElementById('reset-cards'),
+    cardsProgress: document.getElementById('cards-progress'),
+    cardsLeft: document.getElementById('cards-box'),
+    cardsFill: document.getElementById('cards-fill'),
+    cardsStatus: document.getElementById('cards-status'),
+    cardSubject: document.getElementById('card-subject'),
+    cardFlip: document.getElementById('card-flip'),
+    cardFront: document.getElementById('card-front'),
+    cardBack: document.getElementById('card-back'),
+    cardQ: document.getElementById('card-q'),
+    cardA: document.getElementById('card-a'),
+    cardExplain: document.getElementById('card-explain'),
+    cardSource: document.getElementById('card-source'),
+    cardAgain: document.getElementById('card-again'),
+    cardKnow: document.getElementById('card-know'),
+    cardBackBtn: document.getElementById('card-back-btn')
   };
 
   var round = [];
@@ -304,6 +323,148 @@
     document.getElementById('start-h').focus();
   }
 
+  /* ---------------- flashcards ---------------- */
+
+  var fc = window.FLASHCARDS;
+  var fcStore = fc.pickStore(window.localStorage);
+  var cardState = fc.read(fcStore);
+  var cardQueue = [];
+  var cardRounds = 0;
+  var cardDone = 0;
+  var cardFlipped = false;
+  var cardCurrent = null;
+
+  function renderCardSummary() {
+    var s = fc.stats(bank, cardState, Date.now());
+    var text;
+    if (!s.seen) text = 'No flashcard progress yet — every card starts in box 1.';
+    else {
+      text = s.due + ' due now · ' + s.fresh + ' not seen · ' + s.learned + ' in boxes 4–5';
+      if (!s.due && !s.fresh) text += ' · nothing due, come back later or reset';
+    }
+    el.cardsSummary.textContent = text;
+    el.resetCards.hidden = !s.seen;
+  }
+
+  function cardStatus(message) {
+    el.cardsStatus.textContent = message;
+  }
+
+  function paintCardProgress() {
+    el.cardsProgress.textContent = 'Card ' + (cardDone + 1);
+    el.cardsLeft.textContent = cardQueue.length + ' left';
+    var pct = cardRounds ? Math.min(100, (cardDone / cardRounds) * 100) : 0;
+    el.cardsFill.style.width = pct.toFixed(1) + '%';
+  }
+
+  function startCards() {
+    cardQueue = fc.queue(bank, cardState, Date.now());
+    if (!cardQueue.length) {
+      renderCardSummary();
+      cardStatus('Nothing is due right now. Reset progress to run every card again.');
+      return;
+    }
+    cardRounds = cardQueue.length;
+    cardDone = 0;
+    cardCurrent = null;
+    el.start.hidden = true;
+    el.quiz.hidden = true;
+    el.results.hidden = true;
+    el.cards.hidden = false;
+    window.scrollTo(0, 0);
+    showCard();
+  }
+
+  function showCard() {
+    var id = cardQueue[0];
+    var q = bank.filter(function (item) { return item.id === id; })[0];
+    if (!q) { cardQueue.shift(); if (cardQueue.length) showCard(); else finishCards(); return; }
+
+    cardCurrent = q;
+    cardFlipped = false;
+
+    el.cardSubject.textContent = q.subject;
+    el.cardQ.textContent = q.question;
+    el.cardA.textContent = q.options[q.answer];
+    el.cardExplain.textContent = q.explanation;
+    el.cardSource.textContent = q.source;
+
+    el.cardFront.hidden = false;
+    el.cardBack.hidden = true;
+    el.cardFlip.setAttribute('aria-expanded', 'false');
+    el.cardAgain.disabled = true;
+    el.cardKnow.disabled = true;
+    paintCardProgress();
+    cardStatus('Question. Press Space or click the card to flip.');
+    el.cardFlip.focus();
+  }
+
+  function flipCard() {
+    if (!cardCurrent || cardFlipped) return;
+    cardFlipped = true;
+    el.cardFront.hidden = true;
+    el.cardBack.hidden = false;
+    el.cardFlip.setAttribute('aria-expanded', 'true');
+    el.cardAgain.disabled = false;
+    el.cardKnow.disabled = false;
+    cardStatus('Answer shown. Press 1 for again or 2 for know.');
+  }
+
+  function gradeCard(result) {
+    if (!cardCurrent || !cardFlipped) return;
+    var id = cardCurrent.id;
+    fc.grade(cardState, id, result, Date.now());
+    fc.write(fcStore, cardState);
+
+    cardQueue.shift();
+    cardDone += 1;
+    var box = cardState[id].box;
+
+    if (result === 'again') {
+      cardQueue.push(id);
+      cardRounds += 1;
+      cardStatus('Again — this card returns in this session, back in box 1.');
+    } else {
+      var days = fc.INTERVALS[box - 1];
+      cardStatus('Know — now in box ' + box + '. It comes back in ' + days + ' day' + (days === 1 ? '' : 's') + '.');
+    }
+    cardCurrent = null;
+    renderCardSummary();
+
+    if (cardQueue.length) showCard();
+    else finishCards();
+  }
+
+  function finishCards() {
+    var graded = cardDone;
+    el.cards.hidden = true;
+    el.start.hidden = false;
+    el.cardsFill.style.width = '100%';
+    renderCardSummary();
+    el.cardsSummary.textContent += ' · last session: ' + graded + ' card' + (graded === 1 ? '' : 's') + ' graded';
+    document.getElementById('cards-h').setAttribute('tabindex', '-1');
+    document.getElementById('cards-h').focus();
+  }
+
+  function leaveCards() {
+    cardQueue = [];
+    cardCurrent = null;
+    el.cards.hidden = true;
+    el.start.hidden = false;
+    renderCardSummary();
+    window.scrollTo(0, 0);
+    document.getElementById('start-h').focus();
+  }
+
+  function resetCards() {
+    fc.clear(fcStore);
+    cardState = {};
+    cardQueue = [];
+    cardCurrent = null;
+    renderCardSummary();
+    cardStatus('Flashcard progress cleared. All 90 cards are back in box 1.');
+  }
+
   /* ---------------- wiring ---------------- */
 
   buildSubjects();
@@ -315,6 +476,14 @@
   el.again.addEventListener('click', reset);
   el.again2.addEventListener('click', reset);
 
+  renderCardSummary();
+  el.startCards.addEventListener('click', startCards);
+  el.resetCards.addEventListener('click', resetCards);
+  el.cardFlip.addEventListener('click', flipCard);
+  el.cardAgain.addEventListener('click', function () { gradeCard('again'); });
+  el.cardKnow.addEventListener('click', function () { gradeCard('know'); });
+  el.cardBackBtn.addEventListener('click', leaveCards);
+
   /* arrows / number keys answer, Enter advances */
   document.addEventListener('keydown', function (e) {
     if (el.quiz.hidden) return;
@@ -324,5 +493,20 @@
       var btn = el.options.querySelector('.opt[data-index="' + (n - 1) + '"]');
       if (btn) { btn.click(); e.preventDefault(); }
     }
+  });
+
+  /* flashcards: Space flips, 1 again, 2 know, Esc leaves */
+  document.addEventListener('keydown', function (e) {
+    if (el.cards.hidden) return;
+    if (e.key === 'Escape') { e.preventDefault(); leaveCards(); return; }
+    if (e.key === ' ' || e.key === 'Spacebar') {
+      if (e.target === el.cardFlip) return; /* the button's own click handles it */
+      e.preventDefault();
+      flipCard();
+      return;
+    }
+    if (e.key === 'Enter' && e.target === el.cardFlip) return;
+    if (e.key === '1' && cardFlipped) { e.preventDefault(); gradeCard('again'); }
+    if (e.key === '2' && cardFlipped) { e.preventDefault(); gradeCard('know'); }
   });
 })();

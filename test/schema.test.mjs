@@ -93,6 +93,7 @@ test('answers are not clustered on one option index', () => {
 test('index.html wires the plain-file assets and no network URLs', () => {
   const html = readFileSync(path.join(root, 'index.html'), 'utf8');
   assert.match(html, /<script src="questions\.js"><\/script>/);
+  assert.match(html, /<script src="flashcards\.js"><\/script>/);
   assert.match(html, /<script src="app\.js"><\/script>/);
   assert.match(html, /<link rel="stylesheet" href="styles\.css">/);
   assert.doesNotMatch(html, /https?:\/\/[^"']+\.(js|css)/, 'no remote assets');
