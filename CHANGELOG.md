@@ -12,6 +12,8 @@ timeline
 
 `b958a9e2` is the merge of [PR #1](https://github.com/eminogrande/flugschein-training/pull/1) into `main` and the first public release. Deploy: GitHub Pages, <https://eminogrande.github.io/flugschein-training/> (Pages workflow `.github/workflows/pages.yml`, run `40701087940` green on `b958a9e2`; tests run `40701087581` green on the same commit).
 
+Tag `v0.1.0` targets `508c09c`, the release-metadata commit on `main` above the released code; Pages run `40701951159` and tests run `40701951076` are green there and the footer stamp `v0.1.0 · built 2026-10-28 · by emino` is live.
+
 Released content is the 0.2.0 block below, unchanged — that block was written before the merge and never shipped separately, so it lands as part of 0.1.0:
 
 - Quiz from the imported 90-question bank, now with a flashcard mode over it.
