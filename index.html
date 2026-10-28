@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PPL(A) Practice — TCAA syllabus</title>
+<meta name="description" content="Offline English multiple-choice practice for the nine TCAA PPL(A) theory subjects.">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-head">
+  <p class="brand">PPL(A) <span>Practice</span></p>
+  <p class="tagline">Nine-subject TCAA syllabus drill. Works offline.</p>
+</header>
+
+<main id="main" class="wrap">
+
+  <!-- START -->
+  <section id="screen-start" class="screen" aria-labelledby="start-h">
+    <h1 id="start-h">Choose your practice set</h1>
+    <p class="lede">90 original syllabus-style questions, not real exam papers or leaked TCAA items. Every answer is explained straight away.</p>
+
+    <form id="start-form" novalidate>
+      <fieldset class="field">
+        <legend>Subjects <span class="hint">— pick one or more</span></legend>
+        <div class="chips" id="subject-chips"></div>
+        <p class="chips-actions">
+          <button type="button" class="link" id="select-all">Select all</button>
+          <button type="button" class="link" id="select-none">Clear</button>
+        </p>
+      </fieldset>
+
+      <fieldset class="field">
+        <legend>Questions this round</legend>
+        <div class="chips chips-count" id="count-choices">
+          <label class="chip"><input type="radio" name="count" value="10"><span>10</span></label>
+          <label class="chip"><input type="radio" name="count" value="25"><span>25</span></label>
+          <label class="chip"><input type="radio" name="count" value="all" checked><span>All available</span></label>
+        </div>
+      </fieldset>
+
+      <label class="switch">
+        <input type="checkbox" id="shuffle" checked>
+        <span>Shuffle question order</span>
+      </label>
+
+      <p class="error" id="start-error" role="alert" hidden></p>
+      <button type="submit" class="primary" id="start-btn">Start practice</button>
+    </form>
+  </section>
+
+  <!-- QUIZ -->
+  <section id="screen-quiz" class="screen" aria-labelledby="q-text" hidden>
+    <div class="bar" role="group" aria-label="Progress">
+      <div class="bar-row">
+        <span id="progress-text" aria-live="polite">Question 1 of 1</span>
+        <span id="score-text" aria-live="polite">Score 0</span>
+      </div>
+      <div class="track"><div class="fill" id="progress-fill"></div></div>
+    </div>
+
+    <p class="subject-tag" id="q-subject"></p>
+    <h2 id="q-text" class="question"></h2>
+
+    <div class="options" id="options" role="group" aria-labelledby="q-text"></div>
+
+    <div class="feedback" id="feedback" aria-live="assertive" hidden>
+      <p class="verdict" id="verdict"></p>
+      <p class="explain" id="explain"></p>
+      <p class="source" id="source"></p>
+    </div>
+
+    <button type="button" class="primary" id="next-btn" hidden>Next question</button>
+    <button type="button" class="link quit" id="quit-btn">End round</button>
+  </section>
+
+  <!-- RESULTS -->
+  <section id="screen-results" class="screen" aria-labelledby="res-h" hidden>
+    <h1 id="res-h">Round complete</h1>
+    <p class="score-big" id="res-score"></p>
+    <p class="lede" id="res-line"></p>
+    <button type="button" class="primary" id="again-btn">New round</button>
+    <h2 class="sub-h" id="review-h">Review incorrect answers</h2>
+    <div id="review"></div>
+    <button type="button" class="primary" id="again-btn-2" hidden>New round</button>
+  </section>
+
+</main>
+
+<footer class="site-foot">
+  <p>90 original syllabus-style questions. No network, no accounts.</p>
+</footer>
+
+<script src="questions.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
